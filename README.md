@@ -45,4 +45,46 @@ from astropy.cosmology import LambdaCDM
 from scipy import integrate
 ```
 
-blabla
+Escolhemos a regra do trapézio como método de integração para integrar $\displaystyle\int^{z}_{0} = \dfrac{dz'}{E(z')}$:
+
+```python
+def ez(z, omega_m, omega_ee, omega_k, w):
+    return np.sqrt(omega_m*(1+z)**3+omega_k*(1+z)**2+omega_ee*(1+z)**(3*(1+w)))
+
+def integral(z, H, omega_m, omega_ee, omega_k, w):
+    integral = 0
+    soma = 0
+    i = z/100000
+    h = z/100000
+
+    while i < z:
+        soma += 1/ez(i,omega_m,omega_ee,omega_k, w)
+        i += h
+
+    integral = h*(0.5*ez(0,omega_m,omega_ee,omega_k, w) + soma + 0.5*ez(z,omega_m,omega_ee,omega_k, w))
+    return integral
+```
+
+Função para calcular a $D_L$:
+
+```python
+def dist(z, H, omega_m, omega_ee, w):
+
+    omega_k = 1 - omega_m - omega_ee
+
+    c = 3*10**5 # km/s
+    dh = c/H
+    dc = dh*integral(z, H, omega_m, omega_ee, omega_k, w)
+    if omega_k == 0:
+        dm = dc
+    elif omega_k > 0:
+        dm = (dh/np.sqrt(omega_k))*np.sinh(np.sqrt(omega_k)*dc/dh)
+    else:
+        dm = (dh/np.sqrt(-omega_k))*np.sin(np.sqrt(-omega_k)*dc/dh)
+
+    dl = (1+z)*dm
+
+    mod_dist = 5*np.log10(dl*100000)
+
+    return dl, mod_dist
+```
