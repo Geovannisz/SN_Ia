@@ -88,3 +88,31 @@ def dist(z, H, omega_m, omega_ee, w):
 
     return dl, mod_dist
 ```
+
+Caso você queira testar para diferentes entradas:
+
+```python
+z = float(input('Digite o valor de z: '))
+H = float(input('Digite o valor de H: '))
+omega_m = float(input('Digite o valor de omega_m: '))
+omega_ee = float(input('Digite o valor de omega_ee: '))
+w = float(input('Digite o valor de w: '))
+
+l = dist(z,H,omega_m,omega_ee,w)
+print('dl = ',l[0],'Mpc,  dm = ',l[1])
+print('dc = ',l[2],'Mpc, modulo da distancia = ',l[4])
+```
+
+Alguns possíveis valores aleatórios para teste podem ser:
+
+```python
+z = 1
+H = 70
+omega_m = 0
+omega_ee = 1
+w = -1
+
+l = dist(z, H, omega_m, omega_ee, w)
+print("d_l = %.2f" %l[0], "Mpc,  Módulo de distância = %.2f" %l[1])
+```
+`d_l = 8571.51 Mpc, Módulo de distância = 44.67`
