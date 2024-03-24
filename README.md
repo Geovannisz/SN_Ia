@@ -10,8 +10,8 @@ Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro 
 * Mede a taxa de expansão do universo no tempo presente.
 * É um valor fundamental para determinar a idade do universo e a escala de distâncias cosmológicas.
 * Valores atuais estimados:
-    * $H_0 = 67,4 km/s/Mpc$ por meio da análise das flutuações de temperatura da radiação cósmica de fundo em micro-ondas (CMB).
-    * $H_0 = 71,9 km/s/Mpc$ por meio da observação direta da velocidade de galáxias distantes pelo desvio para o vermelho da luz emitida.
+    * $H_0 = 67,4~km\cdot s^{-1}\cdot Mpc^{-1}$ por meio da análise das flutuações de temperatura da radiação cósmica de fundo em micro-ondas (CMB).
+    * $H_0 = 71,9~km\cdot s^{-1}\cdot Mpc^{-1}$ por meio da observação direta da velocidade de galáxias distantes pelo desvio para o vermelho da luz emitida.
 
 **2. $\Omega_{EE}$:** **Densidade de Energia Escura**
 
