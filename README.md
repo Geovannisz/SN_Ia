@@ -86,7 +86,7 @@ e $D_C$ é a distância comóvel na direção da linha de visada
 
 $$ D_C = D_H \displaystyle\int^{z}_{0} \dfrac{dz'}{E(z')} $$
 
-e 
+sendo 
 
 $$ E(z) = \sqrt{\Omega_M (1 + z)^3 + \Omega_k (1 + z)^2 +\Omega_{EE}(1+z)^{3(1+w)}} $$
 
