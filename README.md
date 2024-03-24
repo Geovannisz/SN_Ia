@@ -1,6 +1,66 @@
 # Super Novas do Tipo Ia
 🚀 Neste projeto encontro analiticamente e numericamente constantes cosmológicas do Universo a partir de um banco de dados do redshift de Super Novas do tipo Ia. Para isso foi usado o Monte Carlo da Cadeia de Markov com o fim de determinar a covariância entre diferentes grandezas e de encontrar a máxima verossimilhança de suas respectivas elipses de incertezas.
 
+## Notações e Definições
+
+Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro *Introduction to Cosmology*. Portanto, irei primeiro introduzir aqui brevemente algumas dessas notações.
+
+**1. $H_0$: Constante de Hubble**
+
+* Mede a taxa de expansão do universo no tempo presente.
+* É um valor fundamental para determinar a idade do universo e a escala de distâncias cosmológicas.
+* Valores atuais estimados:
+    * $H_0 = 67,4 km/s/Mpc$ por meio da análise das flutuações de temperatura da radiação cósmica de fundo em micro-ondas (CMB).
+    * $H_0 = 71,9 km/s/Mpc$ por meio da observação direta da velocidade de galáxias distantes pelo desvio para o vermelho da luz emitida.
+
+**2. $\Omega_{EE}$:** **Densidade de Energia Escura**
+
+* Fração da densidade crítica atribuída à energia escura, responsável pela expansão acelerada do universo.
+* Em nosso Universo as estimativas atuais são em torno de 0,7.
+
+**3. $\Omega_m$: Densidade de Matéria**
+
+* Fração da densidade crítica atribuída à matéria total, incluindo matéria bariônica e matéria escura.
+* Em nosso Universo é um valor positivo e menor que 1, com estimativas atuais em torno de 0,3.
+
+**4. $\Omega_k$: Densidade de Curvatura**
+
+* Representa a fração da densidade crítica do universo atribuída à curvatura espacial.
+* Valores:
+    * $\Omega_k > 0$: Universo fechado, com curvatura positiva que faz com que o universo se contraia após um período de expansão.
+        * **Destino:** um "Big Crunch", onde toda a matéria e energia se concentram em um único ponto.
+    * $\Omega_k = 0$: Universo plano, com curvatura zero que faz com que o universo se expanda eternamente sem se curvar.
+        * **Destino:** um "Big Freeze", onde o universo se torna cada vez mais frio e diluído, com estrelas eventualmente se apagando e a formação de novas estrelas se tornando impossível.
+    * $\Omega_k < 0$: Universo aberto, com curvatura negativa que faz com que o universo sofra uma expansão eternamente acelerada.
+        * **Destino:**  um "Big Rip", onde a expansão se torna tão forte que as galáxias, estrelas e até mesmo átomos se desintegram.
+* As medições cosmológicas atuais indicam que $\Omega_k\approx 0$, sendo o universo é muito provavelmente plano. 
+* Relação entre os parâmetros vistos até aqui:
+    * $\Omega_k + \Omega_{EE} + \Omega_m = 1$
+* Exemplo:
+    * Se $\Omega_k = 0$, $\Omega_{EE} = 0,7$ e $\Omega_m = 0,3$, então o universo é plano e a energia escura é a principal componente, seguida pela matéria.
+
+**5. $\Omega_b$: Densidade de Matéria Bariônica**
+
+* Fração da densidade crítica atribuída à matéria bariônica, composta por prótons e nêutrons.
+* É uma fração de $\Omega_m$, com estimativa atual de $\Omega_b = 0,049$.
+
+**6. $\Omega_r$: Densidade de Energia de Radiação**
+
+* Fração da densidade crítica atribuída à energia de radiação, incluindo fótons e neutrinos.
+* É um valor que diminui com o tempo devido à expansão do universo.
+
+**7. $w$: Parâmetro da Equação de Estado da Energia Escura**
+
+* Descreve a relação entre a pressão e a densidade da energia escura.
+* Um valor de $w = -1$ corresponde à energia escura da constante cosmológica $\Lambda$.
+* Valores de $w < -1$ indicam uma energia escura "fantasma" com propriedades exóticas.
+* Valores de $w > -1$ sugerem uma energia escura dinâmica com propriedades que variam com o tempo.
+
+**Observação:**
+
+* A notação de Bárbara Ryder pode ser diferente de outras notações da literatura utilizadas em cosmologia.
+* É importante consultar as definições específicas utilizadas em cada trabalho para evitar ambiguidades.
+
 ## Parte 1 - *A distância em diferentes tipos de Universo*
 
 Vamos, no decorrer desta primeira parte, entender o comportamento da distância de luminosidade $D_L$. Para isso deveremos antes compreender como funciona outros tipos de distâncias como a comóvel $D_C$ e a de Hubble $D_H$. No caso da distância comóvel, como ela é obtida por meio de uma integral, iremos comparar os resultados numéricos em vários casos onde a integral possa ser resolvida analiticamente (e.g. Universo vazio, só de matéria, só de constante cosmológica, etc...). Também iremos mostrar a diferença dos resultados numéricos e analíticos em função do redshift até $z=10$.
@@ -149,12 +209,17 @@ Erro = ((l[0] - D_lambdaCDM)/D_lambdaCDM)*100
 print("Erro percentual = %.3f" %Erro, "porcento")
 ```
 
-Esse código imprimiria no terminal:
+Esse código imprime no terminal:
 
 ```
 Distância de Luminosidade obtida   = 8571.51 Mpc
 Distância de Luminosidade esperada = 8565.50 Mpc
 Erro = 0.070 %
 ```
+> **b)** Iremos agora, antes de prosseguir na nossa análise, comparar o método análitico e a nossa função para um Universo dominado por $\Omega_{EE}$, ou seja, $\Omega_m = 0$, $\Omega_k = 0$ e $\Omega_{EE} = 1$.
+
+Aplicando as formulas dadas no inicio deste trabalho, encontramos que $D_L$ assumirá a seguinte forma:
+
+$$D_L = \dfrac{cz}{H_0}(1 + z)$$
 
 
