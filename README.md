@@ -56,11 +56,6 @@ Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro 
 * Valores de $w < -1$ indicam uma energia escura "fantasma" com propriedades exóticas.
 * Valores de $w > -1$ sugerem uma energia escura dinâmica com propriedades que variam com o tempo.
 
-**Observação:**
-
-* A notação de Bárbara Ryder pode ser diferente de outras notações da literatura utilizadas em cosmologia.
-* É importante consultar as definições específicas utilizadas em cada trabalho para evitar ambiguidades.
-
 ## Parte 1 - *A distância em diferentes tipos de Universo*
 
 Vamos, no decorrer desta primeira parte, entender o comportamento da distância de luminosidade $D_L$. Para isso deveremos antes compreender como funciona outros tipos de distâncias como a comóvel $D_C$ e a de Hubble $D_H$. No caso da distância comóvel, como ela é obtida por meio de uma integral, iremos comparar os resultados numéricos em vários casos onde a integral possa ser resolvida analiticamente (e.g. Universo vazio, só de matéria, só de constante cosmológica, etc...). Também iremos mostrar a diferença dos resultados numéricos e analíticos em função do redshift até $z=10$.
@@ -216,10 +211,127 @@ Distância de Luminosidade obtida   = 8571.51 Mpc
 Distância de Luminosidade esperada = 8565.50 Mpc
 Erro = 0.070 %
 ```
-> **b)** Iremos agora, antes de prosseguir na nossa análise, comparar o método análitico e a nossa função para um Universo dominado por $\Omega_{EE}$, ou seja, $\Omega_m = 0$, $\Omega_k = 0$ e $\Omega_{EE} = 1$.
+> **b)** Iremos agora, antes de prosseguir na nossa análise, comparar o resultado do método análitico e da nossa função para um Universo dominado por $\Omega_{EE}$, ou seja, $\Omega_m = 0$, $\Omega_k = 0$ e $\Omega_{EE} = 1$.
 
 Aplicando as formulas dadas no inicio deste trabalho, encontramos que $D_L$ assumirá a seguinte forma:
 
 $$D_L = \dfrac{cz}{H_0}(1 + z)$$
 
+Portanto, vamos criar uma função que a define:
 
+```python
+def d_LEE(z, c, H):
+   d_L = ((c*z)/H)*(1 + z)
+   return d_L
+```
+
+Agora podemos plotar um gráfico do método analítico e numérico junto com uma respectiva curva de erro entre ambos. Segue o código para tal:
+
+```python
+z = np.arange(0.01, 10, 0.1)
+
+c = 3*10**5 # km/s
+H = 70
+dh = c/H
+omega_m = 0
+omega_ee = 1
+w = -1
+
+eixo_y_EE = np.array([])
+
+for a in z:
+   l = dist(a, H, omega_m, omega_ee, w)
+   eixo_y_EE  = np.append(eixo_y_EE, (H/c)*l[0])
+
+eixo_y_d_LEE = np.array([])
+
+for a in z:
+   D_L = d_LEE(a, c, H)
+   eixo_y_d_LEE  = np.append(eixo_y_d_LEE, (H/c)*D_L)
+
+erro = eixo_y_EE - eixo_y_d_LEE
+
+plt.style.use(matplotx.styles.dracula)
+plt.subplot(2, 1, 1)
+plt.plot(z, eixo_y_EE, linestyle='dashdot', linewidth=2, color='white', label = 'Numérico')
+plt.plot(z, eixo_y_d_LEE, linestyle='-', color='red', label = 'Analítico')
+plt.title('$\\Omega_{EE} = 1$')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
+plt.ylabel('Erro', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.legend()
+```
+
+O gráfico obtido é o seguinte:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/b04366b0-c7f7-434b-bf8b-c1fbc6e762e8)
+
+Nele podemos ver que nosso método numérico se aproxima bastante do real.
+
+> **c)** Vamos agora comparar o resultado do método análitico e da nossa função para um Universo dominado por $\Omega_{m}$, ou seja, $\Omega_m = 1$, $\Omega_k = 0$ e $\Omega_{EE} = 0$.
+
+Aplicando as formulas dadas no inicio desta parte encontramos que $D_L$ assumirá a seguinte forma:
+
+$$D_L = \dfrac{c(1+z)^2}{H_0}\left(2 - \frac{2}{\sqrt{1 + z}}\right)$$
+
+Portanto, vamos criar uma função que a define:
+
+```python
+def d_Lm(z, c, H):
+   d_L = ((c*((1+z)**2))/H)*(2 - (2/(np.sqrt(1+z))))
+   return d_L
+```
+
+Agora podemos plotar um gráfico do método analítico e numérico junto com uma respectiva curva de erro entre ambos. Segue o código para tal:
+
+```python
+z = np.arange(0.01, 10, 0.1)
+
+c = 3*10**5 # km/s
+H = 70
+dh = c/H
+omega_m = 1
+omega_ee = 0
+w = 0
+
+eixo_y_m = np.array([])
+
+for a in z:
+   l = dist(a, H, omega_m, omega_ee, w)
+   eixo_y_m  = np.append(eixo_y_m, (H/c)*l[0])
+
+eixo_y_d_Lm = np.array([])
+
+for a in z:
+   D_L = d_Lm(a, c, H)
+   eixo_y_d_Lm  = np.append(eixo_y_d_Lm, (H/c)*D_L)
+
+erro = eixo_y_m - eixo_y_d_Lm
+
+plt.style.use(matplotx.styles.dracula)
+plt.subplot(2, 1, 1)
+plt.plot(z, eixo_y_m, linestyle='dashdot', linewidth=2, color='white', label = 'Numérico')
+plt.plot(z, eixo_y_d_Lm, linestyle='-', color='red', label = 'Analítico')
+plt.title('$\\Omega_{EE} = 1$')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.ylim(0,16)
+plt.xlim(0, 10)
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
+plt.ylabel('Erro', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.legend()
+```
+
+O gráfico obtido é o seguinte:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/803795fe-a3d2-4d0c-8b2d-05c19c17fde7)
+
+Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$.
