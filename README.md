@@ -3,7 +3,7 @@
 
 ## Notações e Definições
 
-Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro *Introduction to Cosmology*. Portanto, irei primeiro introduzir aqui brevemente algumas dessas notações.
+Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro [*Introduction to Cosmology*](https://amzn.to/4a62Awl). Portanto, irei primeiro introduzir aqui brevemente algumas dessas notações.
 
 **1. $H_0$: Constante de Hubble**
 
