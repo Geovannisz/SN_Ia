@@ -16,12 +16,12 @@ Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro 
 **2. $\Omega_{EE}$:** **Densidade de Energia Escura**
 
 * Fração da densidade crítica atribuída à energia escura, responsável pela expansão acelerada do universo.
-* Em nosso Universo as estimativas atuais são em torno de 0,7.
+* Em nosso Universo as estimativas atuais são em torno de 0,69.
 
 **3. $\Omega_m$: Densidade de Matéria**
 
 * Fração da densidade crítica atribuída à matéria total, incluindo matéria bariônica e matéria escura.
-* Em nosso Universo é um valor positivo e menor que 1, com estimativas atuais em torno de 0,3.
+* Em nosso Universo é um valor positivo e menor que 1, com estimativas atuais em torno de 0,31.
 
 **4. $\Omega_k$: Densidade de Curvatura**
 
@@ -238,16 +238,13 @@ omega_ee = 1
 w = -1
 
 eixo_y_EE = np.array([])
+eixo_y_d_LEE = np.array([])
 
 for a in z:
    l = dist(a, H, omega_m, omega_ee, w)
    eixo_y_EE  = np.append(eixo_y_EE, (H/c)*l[0])
-
-eixo_y_d_LEE = np.array([])
-
-for a in z:
-   D_L = d_LEE(a, c, H)
-   eixo_y_d_LEE  = np.append(eixo_y_d_LEE, (H/c)*D_L)
+   D_l = d_LEE(a, c, H)
+   eixo_y_d_LEE  = np.append(eixo_y_d_LEE, (H/c)*D_l)
 
 erro = eixo_y_EE - eixo_y_d_LEE
 
@@ -264,12 +261,13 @@ plt.subplot(2, 1, 2)
 plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
 plt.ylabel('Erro', fontsize=16)
 plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
 plt.legend()
 ```
 
 O gráfico obtido é o seguinte:
 
-![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/b04366b0-c7f7-434b-bf8b-c1fbc6e762e8)
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/9737f944-1776-493a-98d2-847c5806cd1c)
 
 Nele podemos ver que nosso método numérico se aproxima bastante do real.
 
@@ -300,14 +298,11 @@ omega_ee = 0
 w = 0
 
 eixo_y_m = np.array([])
+eixo_y_d_Lm = np.array([])
 
 for a in z:
    l = dist(a, H, omega_m, omega_ee, w)
    eixo_y_m  = np.append(eixo_y_m, (H/c)*l[0])
-
-eixo_y_d_Lm = np.array([])
-
-for a in z:
    D_L = d_Lm(a, c, H)
    eixo_y_d_Lm  = np.append(eixo_y_d_Lm, (H/c)*D_L)
 
@@ -327,11 +322,253 @@ plt.subplot(2, 1, 2)
 plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
 plt.ylabel('Erro', fontsize=16)
 plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
 plt.legend()
 ```
 
 O gráfico obtido é o seguinte:
 
-![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/803795fe-a3d2-4d0c-8b2d-05c19c17fde7)
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/8b8777a4-5faa-4fe5-9a4f-fdafd61f6b30)
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$.
+
+> **d)** Iremos agora, antes de prosseguir na nossa análise, comparar o método análitico e a nossa função para um Universo dominado por $\Omega_{k}$, ou seja, $\Omega_k = 0$, $\Omega_k = 1$ e $\Omega_{EE} = 0$.
+
+Aplicando as formulas dadas no inicio desta página encontramos que $D_L$ assumirá a seguinte forma:
+
+$$D_L = \dfrac{c(1+z)}{H_0}\ln(1+z)$$
+
+Portanto, vamos criar uma função que a define:
+
+```python
+def d_Lk(z, c, H):
+   d_L = ((c*((1+z)))/H) * np.log(1 + z)
+   return d_L
+```
+
+Agora podemos plotar um gráfico do método analítico e numérico junto com uma respectiva curva de erro entre ambos. Segue o código para tal:
+
+```python
+z = np.arange(0.01, 10, 0.1)
+
+c = 3*10**5 # km/s
+H = 70
+dh = c/H
+omega_m = 0
+omega_ee = 0
+w = -1
+
+eixo_y_k = np.array([])
+eixo_y_d_Lk = np.array([])
+
+for a in z:
+   l = dist(a, H, omega_m, omega_ee, w)
+   eixo_y_k  = np.append(eixo_y_k, (H/c)*l[0])
+   D_L = d_Lk(a, c, H)
+   eixo_y_d_Lk  = np.append(eixo_y_d_Lk, (H/c)*D_L)
+
+erro = eixo_y_k - eixo_y_d_Lk
+
+plt.style.use(matplotx.styles.dracula)
+plt.subplot(2, 1, 1)
+plt.plot(z, eixo_y_k, linestyle='dashdot', linewidth=2, color='white', label = 'Numérico')
+plt.plot(z, eixo_y_d_Lk, linestyle='-', color='red', label = 'Analítico')
+plt.title('$\\Omega_{EE} = 1$')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
+plt.ylabel('Erro', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+```
+
+O gráfico obtido é o seguinte:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/f151414f-311d-454f-a1fb-60b3550b10d2)
+
+Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$, no entanto se distancia menos do que o anterior.
+
+> **e)** Nós iremos agora reproduzir a figura apresentada como Figura 6.2 no [livro de cosmologia de Bárbara Ryder](https://amzn.to/4a62Awl):
+
+Primeiro obteremos o gráfico do Universo dominado pelo parâmetro de energia escura:
+
+$$\Omega_m = 0,\; \Omega_{EE} = 1\;\mathrm{e}\; w = -1$$
+
+```python
+z = np.arange(0.01, 6, 0.05)
+
+c = 3*10**5 # km/s
+H = 70
+dh = c/H
+
+eixo_y_EE = np.array([])
+
+for a in z:
+   l = dist(a, H, 0, 1, -1)
+   eixo_y_EE  = np.append(eixo_y_EE, (H/c)*l[0])
+```
+
+Posteriormente do Universo dominado pela matéria:
+
+$$\Omega_m = 1,\; \Omega_{EE} = 0\;\mathrm{e}\; w = 0$$
+
+```python
+z = np.arange(0.01, 6, 0.05)
+
+c = 3*10**5 # km/s
+H = 70
+dh = c/H
+
+eixo_y_m = np.array([])
+
+for a in z:
+   l = dist(a, H, 1, 0, 0)
+   eixo_y_m  = np.append(eixo_y_m, (H/c)*l[0])
+```
+
+Por fim, do Benchmark:
+
+$$\Omega_m = 0.31,\; \Omega_{EE} = 0.69\;\mathrm{e}\; w = -1$$
+
+```python
+z = np.arange(0.01, 6, 0.05)
+
+c = 3*10**5 # km/s
+H = 70
+dh = c/H
+
+eixo_y_bench = np.array([])
+
+for a in z:
+   l = dist(a, H, 0.31, 0.69, -1)
+   eixo_y_bench  = np.append(eixo_y_bench, (H/c)*l[0])
+```
+
+Podemos finalmente plotar tal gráfico com o seguinte código:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.plot(z, eixo_y_EE, linestyle='dashdot', label = 'Somente $\\Omega_{EE}$')
+plt.plot(z, eixo_y_m, linestyle='--', label = 'Somente Matéria')
+plt.plot(z, eixo_y_bench, linestyle='-', color='white', label = 'Benchmark')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.ylim(0,16)
+plt.xlim(0,6)
+plt.legend()
+```
+
+E, assim, obteremos o gráfico abaixo, que é o da figura em questão do livro.
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/c132f319-acc3-4b23-bca2-a8f331ae38e3)
+
+> **f)** Agora vamos testar a precisão da equação abaixo (da equação 6.31 do [livro de cosmologia de Bárbara Ryder](https://amzn.to/4a62Awl)), para os três casos da figura acima e o mesmo intervalo de redshift.
+
+$$D_L ≈ \dfrac{c}{H_0}(1 + \dfrac{1-q_0}{2}z)$$
+
+onde
+
+$$q_0 = \Omega_m = \Omega_{EE}$$
+
+Portando, vamos definir a função $D_L$:
+
+```python
+def d_L(z, omega_m, omega_ee, dh):
+   q0 = 0.5*omega_m - omega_ee
+   d_L = dh * z * ((1 + ((1 - q0)/2))*z)
+   return d_L
+```
+
+Em um Universo dominado por $\Omega_{EE}$:  
+
+$$\Omega_m = 0,\; \Omega_{EE} = 1\;\mathrm{e}\; w = -1$$
+
+```python
+z = np.arange(0.01, 10, 0.1)
+c = 3*10**5 # km/s
+H = 70 #km/(s*Mpc)
+omega_m = 0
+omega_ee = 1
+w = -1
+dh = c/H
+
+eixo_y_d_L = np.array([])
+eixo_y_EE = np.array([])
+
+for a in z:
+   l = dist(a, H, omega_m, omega_ee, w)
+   eixo_y_EE  = np.append(eixo_y_EE, (H/c)*l[0])
+   D_l = d_L(a, omega_m, omega_ee, dh)
+   eixo_y_d_L  = np.append(eixo_y_d_L, (H/c)*D_l)
+
+erro = eixo_y_d_L - eixo_y_EE
+
+plt.style.use(matplotx.styles.dracula)
+plt.subplot(2, 1, 1)
+plt.plot(z, eixo_y_EE, linestyle='dashdot', color='white', label = 'Numérico')
+plt.plot(z, eixo_y_d_L, linestyle='-', color='red', label = 'Analítico')
+plt.title('$\\Omega_{EE} = 1$')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
+plt.ylabel('Erro', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+```
+
+Segue gráfico que obtemos para $\Omega_{EE} = 1$:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/2317c1f3-dcdd-4ce2-89bc-9c8242db32f2)
+
+Agora, para um Universo dominado por $\Omega_{m}$:  
+
+$$\Omega_m = 1, \;\Omega_{EE} = 0\; \mathrm{e}\; w = 0$$
+
+```python
+z = np.arange(0.01, 10, 0.1)
+c = 3*10**5 # km/s
+H = 70 #km/(s*Mpc)
+omega_m = 1
+omega_ee = 0
+w = 0
+dh = c/H
+
+eixo_y_d_L = np.array([])
+eixo_y_m = np.array([])
+
+for a in z:
+   l = dist(a, H, 1, 0, 0)
+   eixo_y_m  = np.append(eixo_y_m, (H/c)*l[0])
+   D_l = d_L(a, omega_m, omega_ee, dh)
+   eixo_y_d_L  = np.append(eixo_y_d_L, (H/c)*D_l)
+
+erro = eixo_y_d_L - eixo_y_m
+
+plt.style.use(matplotx.styles.dracula)
+plt.subplot(2, 1, 1)
+plt.plot(z, eixo_y_d_L, linestyle='-', color='red', label = 'Analítico')
+plt.plot(z, eixo_y_m, linestyle='dashdot', color='white', label = 'Numérico')
+plt.title('$\\Omega_m = 1$')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
+plt.ylabel('Erro', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+```
+
+Segue gráfico que obtemos para $\Omega_m = 1$:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/384091a3-8d43-4b01-9928-64be19c536e3)
