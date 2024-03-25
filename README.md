@@ -1,6 +1,11 @@
 # Super Novas do Tipo Ia
 🚀 Neste projeto encontro analiticamente e numericamente constantes cosmológicas do Universo a partir de um banco de dados do redshift de Super Novas do tipo Ia. Para isso foi usado o Monte Carlo da Cadeia de Markov com o fim de determinar a covariância entre diferentes grandezas e de encontrar a máxima verossimilhança de suas respectivas elipses de incertezas.
 
+## Sumário
+
+   * [Notações e Definições](#notações-e-definições)
+
+
 ## Notações e Definições
 
 Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro [*Introduction to Cosmology*](https://amzn.to/4a62Awl). Portanto, irei primeiro introduzir aqui brevemente algumas dessas notações.
@@ -59,6 +64,8 @@ Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro 
 ## Parte 1 - *A distância em diferentes tipos de Universo*
 
 Vamos, no decorrer desta primeira parte, entender o comportamento da distância de luminosidade $D_L$. Para isso deveremos antes compreender como funciona outros tipos de distâncias como a comóvel $D_C$ e a de Hubble $D_H$. No caso da distância comóvel, como ela é obtida por meio de uma integral, iremos comparar os resultados numéricos em vários casos onde a integral possa ser resolvida analiticamente (e.g. Universo vazio, só de matéria, só de constante cosmológica, etc...). Também iremos mostrar a diferença dos resultados numéricos e analíticos em função do redshift até $z=10$.
+
+### (a) - Distâncias Cosmológicas
 
 > **a)** Para começar, vamos criar uma função que calcule a distância de luminosidade. Para encontrá-la é necessário o cálculo de uma integral numérica. Por isso, vamos definí-la antes de encontrá-la.
 
@@ -211,6 +218,9 @@ Distância de Luminosidade obtida   = 8571.51 Mpc
 Distância de Luminosidade esperada = 8565.50 Mpc
 Erro = 0.070 %
 ```
+
+### (b) - $D_L$ em um Universo de $\Omega_{EE}$
+
 > **b)** Iremos agora, antes de prosseguir na nossa análise, comparar o resultado do método análitico e da nossa função para um Universo dominado por $\Omega_{EE}$, ou seja, $\Omega_m = 0$, $\Omega_k = 0$ e $\Omega_{EE} = 1$.
 
 Aplicando as formulas dadas no inicio deste trabalho, encontramos que $D_L$ assumirá a seguinte forma:
@@ -271,6 +281,8 @@ O gráfico obtido é o seguinte:
 
 Nele podemos ver que nosso método numérico se aproxima bastante do real.
 
+### (c) - $D_L$ em um Universo de $\Omega_{m}$
+
 > **c)** Vamos agora comparar o resultado do método análitico e da nossa função para um Universo dominado por $\Omega_{m}$, ou seja, $\Omega_m = 1$, $\Omega_k = 0$ e $\Omega_{EE} = 0$.
 
 Aplicando as formulas dadas no inicio desta parte encontramos que $D_L$ assumirá a seguinte forma:
@@ -312,7 +324,7 @@ plt.style.use(matplotx.styles.dracula)
 plt.subplot(2, 1, 1)
 plt.plot(z, eixo_y_m, linestyle='dashdot', linewidth=2, color='white', label = 'Numérico')
 plt.plot(z, eixo_y_d_Lm, linestyle='-', color='red', label = 'Analítico')
-plt.title('$\\Omega_{EE} = 1$')
+plt.title('$\\Omega_{m} = 1$')
 plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
 plt.xlabel('z', fontsize=16)
 plt.ylim(0,16)
@@ -331,6 +343,8 @@ O gráfico obtido é o seguinte:
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/8b8777a4-5faa-4fe5-9a4f-fdafd61f6b30)
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$.
+
+### (d) - $D_L$ em um Universo de $\Omega_{k}$
 
 > **d)** Iremos agora, antes de prosseguir na nossa análise, comparar o método análitico e a nossa função para um Universo dominado por $\Omega_{k}$, ou seja, $\Omega_k = 0$, $\Omega_k = 1$ e $\Omega_{EE} = 0$.
 
@@ -391,6 +405,8 @@ O gráfico obtido é o seguinte:
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/f151414f-311d-454f-a1fb-60b3550b10d2)
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$, no entanto se distancia menos do que o anterior.
+
+### (e) - $\Omega_{EE}$, $\Omega_m$ e Benchmark
 
 > **e)** Nós iremos agora reproduzir a figura apresentada como Figura 6.2 no [livro de cosmologia de Bárbara Ryder](https://amzn.to/4a62Awl):
 
@@ -465,6 +481,8 @@ plt.legend()
 E, assim, obteremos o gráfico abaixo, que é o da figura em questão do livro.
 
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/c132f319-acc3-4b23-bca2-a8f331ae38e3)
+
+### (f) - Outra Maneira de Encontrar $D_L$
 
 > **f)** Agora vamos testar a precisão da equação abaixo (da equação 6.31 do [livro de cosmologia de Bárbara Ryder](https://amzn.to/4a62Awl)), para os três casos da figura acima e o mesmo intervalo de redshift.
 
