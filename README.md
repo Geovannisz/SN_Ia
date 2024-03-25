@@ -18,6 +18,7 @@
       * [(d) - Distâncias em Universo Fechado](#d---d_l-em-um-universo-de-omega_k)
       * [(e) - Comparação das Distâncias nos Universos](#e---omega_ee-omega_m-e-benchmark)
       * [(f) - Modo Alternativo de Medir Distâncias](#f---outra-maneira-de-encontrar-d_l)
+      * [(g) - Magnitude Aparente em Diferentes Universos](#g---outra-maneira-de-encontrar-d_l)
 
 ## Notações e Definições
 
@@ -603,3 +604,7 @@ plt.legend()
 Segue gráfico que obtemos para $\Omega_m = 1$:
 
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/384091a3-8d43-4b01-9928-64be19c536e3)
+
+### (g) - Magnitude Aparente em Diferentes Universos
+
+
