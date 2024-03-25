@@ -3,14 +3,21 @@
 
 ## Sumário
 * [**Super Novas do Tipo Ia**](#super-novas-do-tipo-ia)
-   * [Notações e Definições](#notações-e-definições)
+   * [*Notações e Definições*](#notações-e-definições)
       * [1. Constante de Hubble](#1-h_0--constante-de-hubble)
-      * [2. Densidade de Energia Escura](#1-h_0--constante-de-hubble)
-      * [3. Densidade de Matéria](#1-h_0--constante-de-hubble)
-      * [4. Densidade de Curvatura](#1-h_0--constante-de-hubble)
-      * [5. Densidade de Matéria Bariônica](#1-h_0--constante-de-hubble)
-      * [6. Densidade de Energia de Radiação](#1-h_0--constante-de-hubble)
-      * [7. Parâmetro da Equação de Estado da Energia Escura](#1-h_0--constante-de-hubble)
+      * [2. Densidade de Energia Escura](#2-omega_ee--densidade-de-energia-escura)
+      * [3. Densidade de Matéria](#3-omega_m--densidade-de-matéria)
+      * [4. Densidade de Curvatura](#4-omega_k--densidade-de-curvatura)
+      * [5. Densidade de Matéria Bariônica](#5-omega_b--densidade-de-matéria-bariônica)
+      * [6. Densidade de Energia de Radiação](#6-omega_r--densidade-de-energia-de-radiação)
+      * [7. Parâmetro da Equação de Estado da Energia Escura](#7-w--parâmetro-da-equação-de-estado-da-energia-escura)
+  * [*A distância em diferentes tipos de Universo*](#parte-1---a-distância-em-diferentes-tipos-de-universo)
+      * [(a) - Distâncias Cosmológicas](#a---distâncias-cosmológicas)
+      * [(b) - Distâncias em Universo de Energia Escura](#b---d_l-em-um-universo-de-omega_ee)
+      * [(c) - Distâncias em Universo de Matéria](#c---d_l-em-um-universo-de-omega_m)
+      * [(d) - Distâncias em Universo Fechado](#d---d_l-em-um-universo-de-omega_k)
+      * [(e) - Comparação das Distâncias nos Universos](#e---omega_ee-omega_m-e-benchmark)
+      * [(f) - Modo Alternativo de Medir Distâncias](#f---outra-maneira-de-encontrar-d_l)
 
 ## Notações e Definições
 
