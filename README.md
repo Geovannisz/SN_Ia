@@ -296,7 +296,11 @@ plt.legend()
 
 O gráfico obtido é o seguinte:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/9737f944-1776-493a-98d2-847c5806cd1c)
+
+</div>
 
 Nele podemos ver que nosso método numérico se aproxima bastante do real.
 
@@ -359,7 +363,11 @@ plt.legend()
 
 O gráfico obtido é o seguinte:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/8b8777a4-5faa-4fe5-9a4f-fdafd61f6b30)
+
+</div>
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$.
 
@@ -421,7 +429,11 @@ plt.legend()
 
 O gráfico obtido é o seguinte:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/f151414f-311d-454f-a1fb-60b3550b10d2)
+
+</div>
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$, no entanto se distancia menos do que o anterior.
 
@@ -499,7 +511,11 @@ plt.legend()
 
 E, assim, obteremos o gráfico abaixo, que é o da figura em questão do livro.
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/c132f319-acc3-4b23-bca2-a8f331ae38e3)
+
+</div>
 
 ### (f) - Outra Maneira de Encontrar $D_L$
 
@@ -563,7 +579,11 @@ plt.legend()
 
 Segue gráfico que obtemos para $\Omega_{EE} = 1$:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/2317c1f3-dcdd-4ce2-89bc-9c8242db32f2)
+
+</div>
 
 Agora, para um Universo dominado por $\Omega_{m}$:  
 
@@ -608,7 +628,11 @@ plt.legend()
 
 Segue gráfico que obtemos para $\Omega_m = 1$:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/384091a3-8d43-4b01-9928-64be19c536e3)
+
+</div>
 
 Por fim, para um Universo Vazio com:
 
@@ -652,11 +676,17 @@ plt.legend()
 
 Com isso obtemos para $\Omega_k = 1$:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/a4a20027-4386-4365-a738-60f804742b29)
+
+</div>
 
 ### (g) - Magnitude Aparente em Diferentes Universos
 
 > **g)** Ignorando as correções K e por extinção, vamos calcular a magnitude aparente de um objeto em $z=1$, com magnitude absoluta $M=-19,05$ nos casos abaixo:
+
+<div align="center">
 
 | Tipo de Universo       | $\Omega_m$ | $\Omega_{EE}$ | $w$    |
 |          :---:         |    :---:   |     :---:     |  :---: |
@@ -665,6 +695,8 @@ Com isso obtemos para $\Omega_k = 1$:
 | "Padrão" (o nosso)     | $0.3$      | $0.7$         | $-1.0$ |
 | $\Omega_{EE}$ Dinâmica | $0.3$      | $0.7$         | $-0.8$ |
 | $\Omega_{EE}$ Exótica  | $0.3$      | $0.7$         | $-1.2$ |
+
+</div>
 
 A função `dist(z,H,omega_m,omega_ee,w)` criada anteriormente nos retorna o valor da distância de luminosidade e também o valor do módulo da distância $\mu$. Lembrando que $\mu = m - M$, onde $M$ é a magnitude absoluta e $m$ é a magnitude aparente, dado que $M = -19,05$, pode-se encontrar o valor de $m$.
 
@@ -731,6 +763,8 @@ dados.head()
 
 O linha `dados.head()` imprimiria as 5 primeiras linhas dos [dados](dados.csv):
 
+<div align="center">
+
 |	      | redshift	| modulo_de_distancia |	erro_do_mod_dist |
 | :---: |   :---:   |        :---:        |       :---:      |
 | **0** |	0.028488  |	     35.339320      |	    0.223906     |
@@ -738,6 +772,8 @@ O linha `dados.head()` imprimiria as 5 primeiras linhas dos [dados](dados.csv):
 | **2** |	0.052926  |	     36.804163      |	    0.155756     |
 | **3** |	0.070086  |	     37.428796      |    	0.158467     |
 | **4** |	0.062668  |	     37.467377      |    	0.156099     |
+
+</div>
 
 Vamos definir $\chi^2$, para isso, deve-se lembrar que ele é dado por:
 
