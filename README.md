@@ -11,7 +11,7 @@
       * [5. Densidade de Matéria Bariônica](#5-omega_b--densidade-de-matéria-bariônica)
       * [6. Densidade de Energia de Radiação](#6-omega_r--densidade-de-energia-de-radiação)
       * [7. Parâmetro da Equação de Estado da Energia Escura](#7-w--parâmetro-da-equação-de-estado-da-energia-escura)
-  * [*A distância em diferentes tipos de Universo*](#parte-1---a-distância-em-diferentes-tipos-de-universo)
+  * [*A Distância em Diferentes Tipos de Universo*](#parte-1---a-distância-em-diferentes-tipos-de-universo)
       * [(a) - Distâncias Cosmológicas](#a---distâncias-cosmológicas)
       * [(b) - Distâncias em Universo de Energia Escura](#b---d_l-em-um-universo-de-omega_ee)
       * [(c) - Distâncias em Universo de Matéria](#c---d_l-em-um-universo-de-omega_m)
