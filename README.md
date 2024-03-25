@@ -2,15 +2,21 @@
 🚀 Neste projeto encontro analiticamente e numericamente constantes cosmológicas do Universo a partir de um banco de dados do redshift de Super Novas do tipo Ia. Para isso foi usado o Monte Carlo da Cadeia de Markov com o fim de determinar a covariância entre diferentes grandezas e de encontrar a máxima verossimilhança de suas respectivas elipses de incertezas.
 
 ## Sumário
-
+* [**Super Novas do Tipo Ia**](#super-novas-do-tipo-ia)
    * [Notações e Definições](#notações-e-definições)
-
+      * [1. Constante de Hubble](#1-h_0--constante-de-hubble)
+      * [2. Densidade de Energia Escura](#1-h_0--constante-de-hubble)
+      * [3. Densidade de Matéria](#1-h_0--constante-de-hubble)
+      * [4. Densidade de Curvatura](#1-h_0--constante-de-hubble)
+      * [5. Densidade de Matéria Bariônica](#1-h_0--constante-de-hubble)
+      * [6. Densidade de Energia de Radiação](#1-h_0--constante-de-hubble)
+      * [7. Parâmetro da Equação de Estado da Energia Escura](#1-h_0--constante-de-hubble)
 
 ## Notações e Definições
 
 Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro [*Introduction to Cosmology*](https://amzn.to/4a62Awl). Portanto, irei primeiro introduzir aqui brevemente algumas dessas notações.
 
-**1. $H_0$: Constante de Hubble**
+### **1. $H_0$ : Constante de Hubble**
 
 * Mede a taxa de expansão do universo no tempo presente.
 * É um valor fundamental para determinar a idade do universo e a escala de distâncias cosmológicas.
@@ -18,25 +24,25 @@ Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro 
     * $H_0 = 67,4~km\cdot s^{-1}\cdot Mpc^{-1}$ por meio da análise das flutuações de temperatura da radiação cósmica de fundo em micro-ondas (CMB).
     * $H_0 = 71,9~km\cdot s^{-1}\cdot Mpc^{-1}$ por meio da observação direta da velocidade de galáxias distantes pelo desvio para o vermelho da luz emitida.
 
-**2. $\Omega_{EE}$:** **Densidade de Energia Escura**
+### **2. $\Omega_{EE}$ : Densidade de Energia Escura**
 
 * Fração da densidade crítica atribuída à energia escura, responsável pela expansão acelerada do universo.
 * Em nosso Universo as estimativas atuais são em torno de 0,69.
 
-**3. $\Omega_m$: Densidade de Matéria**
+### **3. $\Omega_m$ : Densidade de Matéria**
 
 * Fração da densidade crítica atribuída à matéria total, incluindo matéria bariônica e matéria escura.
 * Em nosso Universo é um valor positivo e menor que 1, com estimativas atuais em torno de 0,31.
 
-**4. $\Omega_k$: Densidade de Curvatura**
+### **4. $\Omega_k$ : Densidade de Curvatura**
 
 * Representa a fração da densidade crítica do universo atribuída à curvatura espacial.
 * Valores:
-    * $\Omega_k > 0$: Universo fechado, com curvatura positiva que faz com que o universo se contraia após um período de expansão.
+    * $\Omega_k > 0$ : Universo fechado, com curvatura positiva que faz com que o universo se contraia após um período de expansão.
         * **Destino:** um "Big Crunch", onde toda a matéria e energia se concentram em um único ponto.
-    * $\Omega_k = 0$: Universo plano, com curvatura zero que faz com que o universo se expanda eternamente sem se curvar.
+    * $\Omega_k = 0$ : Universo plano, com curvatura zero que faz com que o universo se expanda eternamente sem se curvar.
         * **Destino:** um "Big Freeze", onde o universo se torna cada vez mais frio e diluído, com estrelas eventualmente se apagando e a formação de novas estrelas se tornando impossível.
-    * $\Omega_k < 0$: Universo aberto, com curvatura negativa que faz com que o universo sofra uma expansão eternamente acelerada.
+    * $\Omega_k < 0$ : Universo aberto, com curvatura negativa que faz com que o universo sofra uma expansão eternamente acelerada.
         * **Destino:**  um "Big Rip", onde a expansão se torna tão forte que as galáxias, estrelas e até mesmo átomos se desintegram.
 * As medições cosmológicas atuais indicam que $\Omega_k\approx 0$, sendo o universo é muito provavelmente plano. 
 * Relação entre os parâmetros vistos até aqui:
@@ -44,17 +50,17 @@ Aqui neste projeto, utilizarei a mesma notação de Bárbara Ryder em seu livro 
 * Exemplo:
     * Se $\Omega_k = 0$, $\Omega_{EE} = 0,7$ e $\Omega_m = 0,3$, então o universo é plano e a energia escura é a principal componente, seguida pela matéria.
 
-**5. $\Omega_b$: Densidade de Matéria Bariônica**
+### **5. $\Omega_b$ : Densidade de Matéria Bariônica**
 
 * Fração da densidade crítica atribuída à matéria bariônica, composta por prótons e nêutrons.
 * É uma fração de $\Omega_m$, com estimativa atual de $\Omega_b = 0,049$.
 
-**6. $\Omega_r$: Densidade de Energia de Radiação**
+### **6. $\Omega_r$ : Densidade de Energia de Radiação**
 
 * Fração da densidade crítica atribuída à energia de radiação, incluindo fótons e neutrinos.
 * É um valor que diminui com o tempo devido à expansão do universo.
 
-**7. $w$: Parâmetro da Equação de Estado da Energia Escura**
+### **7. $w$ : Parâmetro da Equação de Estado da Energia Escura**
 
 * Descreve a relação entre a pressão e a densidade da energia escura.
 * Um valor de $w = -1$ corresponde à energia escura da constante cosmológica $\Lambda$.
