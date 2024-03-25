@@ -18,7 +18,7 @@
       * [(d) - Distâncias em Universo Fechado](#d---d_l-em-um-universo-de-omega_k)
       * [(e) - Comparação das Distâncias nos Universos](#e---omega_ee-omega_m-e-benchmark)
       * [(f) - Modo Alternativo de Medir Distâncias](#f---outra-maneira-de-encontrar-d_l)
-      * [(g) - Magnitude Aparente em Diferentes Universos](#g---outra-maneira-de-encontrar-d_l)
+      * [(g) - Magnitude Aparente em Diferentes Universos](#g---magnitude-aparente-em-diferentes-universos)
 
 ## Notações e Definições
 
