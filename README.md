@@ -2,23 +2,23 @@
 🚀 Neste projeto encontro analiticamente e numericamente constantes cosmológicas do Universo a partir de um banco de dados do redshift de Super Novas do tipo Ia. Para isso foi usado o Monte Carlo da Cadeia de Markov com o fim de determinar a covariância entre diferentes grandezas e de encontrar a máxima verossimilhança de suas respectivas elipses de incertezas.
 
 ## Sumário
-* [**Super Novas do Tipo Ia**](#super-novas-do-tipo-ia)
-   * [*Notações e Definições*](#notações-e-definições)
-      * [1. Constante de Hubble](#1-h_0--constante-de-hubble)
-      * [2. Densidade de Energia Escura](#2-omega_ee--densidade-de-energia-escura)
-      * [3. Densidade de Matéria](#3-omega_m--densidade-de-matéria)
-      * [4. Densidade de Curvatura](#4-omega_k--densidade-de-curvatura)
-      * [5. Densidade de Matéria Bariônica](#5-omega_b--densidade-de-matéria-bariônica)
-      * [6. Densidade de Energia de Radiação](#6-omega_r--densidade-de-energia-de-radiação)
-      * [7. Parâmetro da Equação de Estado da Energia Escura](#7-w--parâmetro-da-equação-de-estado-da-energia-escura)
-  * [*A Distância em Diferentes Tipos de Universo*](#parte-1---a-distância-em-diferentes-tipos-de-universo)
-      * [(a) - Distâncias Cosmológicas](#a---distâncias-cosmológicas)
-      * [(b) - Distâncias em Universo de Energia Escura](#b---d_l-em-um-universo-de-omega_ee)
-      * [(c) - Distâncias em Universo de Matéria](#c---d_l-em-um-universo-de-omega_m)
-      * [(d) - Distâncias em Universo Fechado](#d---d_l-em-um-universo-de-omega_k)
-      * [(e) - Comparação das Distâncias nos Universos](#e---omega_ee-omega_m-e-benchmark)
-      * [(f) - Modo Alternativo de Medir Distâncias](#f---outra-maneira-de-encontrar-d_l)
-      * [(g) - Magnitude Aparente em Diferentes Universos](#g---magnitude-aparente-em-diferentes-universos)
+* [***Super Novas do Tipo Ia***](#super-novas-do-tipo-ia)
+   * [**Notações e Definições**](#notações-e-definições)
+      * [1. *Constante de Hubble*](#1-h_0--constante-de-hubble)
+      * [2. *Densidade de Energia Escura*](#2-omega_ee--densidade-de-energia-escura)
+      * [3. *Densidade de Matéria*](#3-omega_m--densidade-de-matéria)
+      * [4. *Densidade de Curvatura*](#4-omega_k--densidade-de-curvatura)
+      * [5. *Densidade de Matéria Bariônica*](#5-omega_b--densidade-de-matéria-bariônica)
+      * [6. *Densidade de Energia de Radiação*](#6-omega_r--densidade-de-energia-de-radiação)
+      * [7. *Parâmetro da Equação de Estado da Energia Escura*](#7-w--parâmetro-da-equação-de-estado-da-energia-escura)
+  * [**A Distância em Diferentes Tipos de Universo**](#parte-1---a-distância-em-diferentes-tipos-de-universo)
+      * [(a) - *Distâncias Cosmológicas*](#a---distâncias-cosmológicas)
+      * [(b) - *Distâncias em Universo de Energia Escura*](#b---d_l-em-um-universo-de-omega_ee)
+      * [(c) - *Distâncias em Universo de Matéria*](#c---d_l-em-um-universo-de-omega_m)
+      * [(d) - *Distâncias em Universo Fechado*](#d---d_l-em-um-universo-de-omega_k)
+      * [(e) - *Comparação das Distâncias nos Universos*](#e---omega_ee-omega_m-e-benchmark)
+      * [(f) - *Modo Alternativo de Medir Distâncias*](#f---outra-maneira-de-encontrar-d_l)
+      * [(g) - *Magnitude Aparente em Diferentes Universos*](#g---magnitude-aparente-em-diferentes-universos)
 
 ## Notações e Definições
 
@@ -83,21 +83,21 @@ Vamos, no decorrer desta primeira parte, entender o comportamento da distância 
 
 > **a)** Para começar, vamos criar uma função que calcule a distância de luminosidade. Para encontrá-la é necessário o cálculo de uma integral numérica. Por isso, vamos definí-la antes de encontrá-la.
 
-Para determinar a distância de luminosidade $D_L$ de acordo como o artigo do Hoog, temos que calcular a seguinte expressão:
+Para determinar a distância de luminosidade $D_L$, temos que calcular a seguinte expressão:
 
 $$D_L = (1 + z)D_M$$
 
-onde para $\Omega_k > 0$:
+onde 
 
-$$ D_M = D_H \dfrac{1}{\sqrt{\Omega_k}}\sinh\left[\dfrac{D_C}{D_H}\sqrt{\Omega_k}\right] $$
-
-e para $\Omega_k = 0$:
-
-$$ D_M = D_C$$
-
-e, por fim, para $\Omega_k < 0$:
-
-$$ D_M = D_H \dfrac{1}{\sqrt{\Omega_k}}\sin\left[\dfrac{D_C}{D_H}\sqrt{\Omega_k}\right] $$
+```math
+\begin{align}
+    D_M = \begin{dcases*}
+      D_H \dfrac{1}{\sqrt{\Omega_k}}\sinh\left[\dfrac{D_C}{D_H}\sqrt{\Omega_k}\right] & para $\Omega_k > 0$\\
+      D_C & para $\Omega_k = 0$\\
+      D_H \dfrac{1}{\sqrt{\Omega_k}}\sin\left[\dfrac{D_C}{D_H}\sqrt{\Omega_k}\right] & para $\Omega_k < 0$
+    \end{dcases*}
+\end{align}
+```
     
 sendo $D_H$ é a distância de Hubble 
 
@@ -607,4 +607,19 @@ Segue gráfico que obtemos para $\Omega_m = 1$:
 
 ### (g) - Magnitude Aparente em Diferentes Universos
 
+> **g)** Ignorando as correções K e por extinção, vamos calcular a magnitude aparente de um objeto em $z=1$, com magnitude absoluta $M=-19,05$ nos casos abaixo:
 
+| Tipo de Universo       | $\Omega_m$ | $\Omega_{EE}$ | $w$    |
+|          :---:         |    :---:   |     :---:     |  :---: |
+| Einstein-de-Sitter     | $1.0$      | $0.0$         |        |
+| Geometria Aberta       | $0.3$      | $0.0$         |        |
+| "Padrão" (o nosso)     | $0.3$      | $0.7$         | $-1.0$ |
+| $\Omega_{EE}$ Dinâmica | $0.3$      | $0.7$         | $-0.8$ |
+| $\Omega_{EE}$ Exótica  | $0.3$      | $0.7$         | $-1.2$ |
+
+A função `dist(z,H,omega_m,omega_ee,w)` criada anteriormente nos retorna o valor da distância de luminosidade e também o valor do módulo da distância $\mu$. Lembrando que $\mu = m - M$, onde $M$ é a magnitude absoluta e $m$ é a magnitude aparente, dado que $M = -19,05$, pode-se encontrar o valor de $m$.
+
+
+
+
+[dados](dados.csv)
