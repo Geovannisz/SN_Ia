@@ -19,6 +19,11 @@
       * [(e) - *Comparação das Distâncias nos Universos*](#e---omega_ee-omega_m-e-benchmark)
       * [(f) - *Modo Alternativo de Medir Distâncias*](#f---outra-maneira-de-encontrar-d_l)
       * [(g) - *Magnitude Aparente em Diferentes Universos*](#g---magnitude-aparente-em-diferentes-universos)
+  * [**O Redshift de Super Novas do Tipo Ia**](#parte-2---o-redshift-de-super-novas-do-tipo-ia)
+      * [(a) - *Calculando a Densidade de Energia Escura*](#a---calculando-a-densidade-de-energia-escura)
+      * [(b) - *Elipses de Covariância de Matéria e Energia Escura*](#b---elipses-de-covariância-de-matéria-e-energia-escura)
+      * [(c) - *Covariância de Matéria e Energia Escura em um Universo Aberto*](#c---covariância-de-matéria-e-energia-escura-em-um-universo-aberto)
+      * [(d) - *Covariância entre Matéria e Pressão da Energia Escura*](#d---covariância-entre-matéria-e-pressão-da-energia-escura)
 
 ## Notações e Definições
 
@@ -291,7 +296,11 @@ plt.legend()
 
 O gráfico obtido é o seguinte:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/9737f944-1776-493a-98d2-847c5806cd1c)
+
+</div>
 
 Nele podemos ver que nosso método numérico se aproxima bastante do real.
 
@@ -354,7 +363,11 @@ plt.legend()
 
 O gráfico obtido é o seguinte:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/8b8777a4-5faa-4fe5-9a4f-fdafd61f6b30)
+
+</div>
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$.
 
@@ -416,7 +429,11 @@ plt.legend()
 
 O gráfico obtido é o seguinte:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/f151414f-311d-454f-a1fb-60b3550b10d2)
+
+</div>
 
 Nele podemos ver que nosso método analítico se distancia exponencialmente do numérico a medida que aumenta o valor de $z$, no entanto se distancia menos do que o anterior.
 
@@ -494,7 +511,11 @@ plt.legend()
 
 E, assim, obteremos o gráfico abaixo, que é o da figura em questão do livro.
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/c132f319-acc3-4b23-bca2-a8f331ae38e3)
+
+</div>
 
 ### (f) - Outra Maneira de Encontrar $D_L$
 
@@ -558,7 +579,11 @@ plt.legend()
 
 Segue gráfico que obtemos para $\Omega_{EE} = 1$:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/2317c1f3-dcdd-4ce2-89bc-9c8242db32f2)
+
+</div>
 
 Agora, para um Universo dominado por $\Omega_{m}$:  
 
@@ -603,11 +628,65 @@ plt.legend()
 
 Segue gráfico que obtemos para $\Omega_m = 1$:
 
+<div align="center">
+
 ![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/384091a3-8d43-4b01-9928-64be19c536e3)
+
+</div>
+
+Por fim, para um Universo Vazio com:
+
+$$\Omega_{k} = 1, \;\Omega_m = 1, \;\Omega_{EE} = 0\; \mathrm{e}\; w = 0$$
+
+```python
+z = np.arange(0.01, 10, 0.1)
+c = 3*10**5 # km/s
+H = 70 #km/(s*Mpc)
+omega_m = 0
+omega_ee = 0
+w = 0
+dh = c/H
+
+eixo_y_d_L = np.array([])
+eixo_y_bench = np.array([])
+for a in z:
+  l = dist(a, H, 0.31, 0.69, -1)
+  eixo_y_bench  = np.append(eixo_y_bench, (H/c)*l[0])
+  l = d_L(a, omega_m, omega_ee, dh)
+  eixo_y_d_L  = np.append(eixo_y_d_L, (H/c)*l)
+
+erro = eixo_y_d_L - eixo_y_bench
+
+plt.style.use(matplotx.styles.dracula)
+plt.subplot(2, 1, 1)
+plt.plot(z, eixo_y_d_L, linestyle='-', color='red', label = 'Analítico')
+plt.plot(z, eixo_y_bench, linestyle='dashdot', color='white', label = 'Numérico')
+plt.title('$\\Omega_k = 1$')
+plt.ylabel('$\\frac{D_{L}H_{0}}{c}$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+plt.subplot(2, 1, 2)
+plt.plot(z, erro, linestyle='-', color='yellow', label = 'erro')
+plt.ylabel('Erro', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.xlim(0, 10)
+plt.legend()
+```
+
+Com isso obtemos para $\Omega_k = 1$:
+
+<div align="center">
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/a4a20027-4386-4365-a738-60f804742b29)
+
+</div>
 
 ### (g) - Magnitude Aparente em Diferentes Universos
 
 > **g)** Ignorando as correções K e por extinção, vamos calcular a magnitude aparente de um objeto em $z=1$, com magnitude absoluta $M=-19,05$ nos casos abaixo:
+
+<div align="center">
 
 | Tipo de Universo       | $\Omega_m$ | $\Omega_{EE}$ | $w$    |
 |          :---:         |    :---:   |     :---:     |  :---: |
@@ -617,9 +696,120 @@ Segue gráfico que obtemos para $\Omega_m = 1$:
 | $\Omega_{EE}$ Dinâmica | $0.3$      | $0.7$         | $-0.8$ |
 | $\Omega_{EE}$ Exótica  | $0.3$      | $0.7$         | $-1.2$ |
 
+</div>
+
 A função `dist(z,H,omega_m,omega_ee,w)` criada anteriormente nos retorna o valor da distância de luminosidade e também o valor do módulo da distância $\mu$. Lembrando que $\mu = m - M$, onde $M$ é a magnitude absoluta e $m$ é a magnitude aparente, dado que $M = -19,05$, pode-se encontrar o valor de $m$.
 
+```python
+M = -19.05
+
+# modelo Einstein de Sitter
+mi1 = dist(1,70,1,0,0)[1]
+m1 = mi1 + M
+
+# modelo Aberto
+mi2 = dist(1,70,0.3,0,0)[1]
+m2 = mi2 + M
+
+# modelo Padrão
+mi3 = dist(1,70,0.3,0.7,-1)[1]
+m3 = mi3 + M
+
+# modelo 4
+mi4 = dist(1,70,0.3,0.7,-0.8)[1]
+m4 = mi4 + M
+
+# modelo 5
+mi5 = dist(1,70,0.3,0.7,-1.2)[1]
+m5 = mi5 + M
+
+print(" No modelo Einstein-de-Sitter:      m = %.2f" %m1,
+      "\n No modelo de Geometria Aberta:     m = %.2f" %m2,
+      "\n No modelo \"Padrão\" (o nosso):      m = %.2f" %m3,
+      "\n No modelo Energia Escura Dinâmica: m = %.2f" %m4,
+      "\n No modelo Energia Escura Exótica:  m = %.2f" %m5
+      )
+```
+
+Esse código nos imprimirá a magnitude aparente para cada tipo de Universo:
+
+```
+ No modelo Einstein-de-Sitter:      m = 24.45 
+ No modelo de Geometria Aberta:     m = 24.80 
+ No modelo "Padrão" (o nosso):      m = 25.05 
+ No modelo Energia Escura Dinâmica: m = 24.96 
+ No modelo Energia Escura Exótica:  m = 25.13
+```
+
+## Parte 2 - *O Redshift de Super Novas do Tipo Ia*
+
+De agora em diante, usaremos os [dados](dados.csv) coletados do Redshift de Supernovas do tipo Ia na nossa análise.
+
+### (a) - Calculando a Densidade de Energia Escura
+
+> **a)** Vamos calcular o melhor valor (máxima verossimilhança) e os intervalos de $68,3$%, $95,4$% e $99,7$% ($1$, $2$, $3$ “$\sigma$” de uma distribuição Normal) para o $\Omega_{EE}$, supondo $w=-1$ e um Universo Plano.  Além disso, sabendo que a probabilidade $P(\Omega_{EE}) ∝ e^{-\chi^2}$, também vamos calcular a probabilidade desses dados indicarem que a densidade da energia escura é maior do que $0.5$:
+
+$$\dfrac{\displaystyle\int_{0.5}^{+\infty} P(\Omega_{EE})d\Omega_{EE}}{\displaystyle\int_{-\infty}^{+\infty} P(\Omega_{EE})d\Omega_{EE}}$$
+
+Em problemas unidimensionais, com este, $\Delta\chi = 1.0, 4.0, 9.0$ para (1, 2, 3 “$\sigma$”).
+
+Primeiro vamos importar nossos [dados](dados.csv) no código:
+
+```python
+url = 'https://raw.githubusercontent.com/Geovannisz/SN_Ia/main/dados.csv'
+dados = pd.read_csv("https://raw.githubusercontent.com/Geovannisz/SN_Ia/main/dados.csv", delimiter= " ")
+dados.head()
+```
+
+O linha `dados.head()` imprimiria as 5 primeiras linhas dos [dados](dados.csv):
+
+<div align="center">
+
+|	      | redshift	| modulo_de_distancia |	erro_do_mod_dist |
+| :---: |   :---:   |        :---:        |       :---:      |
+| **0** |	0.028488  |	     35.339320      |	    0.223906     |
+| **1** |	0.050043  |	     36.669580      |    	0.166829     |
+| **2** |	0.052926  |	     36.804163      |	    0.155756     |
+| **3** |	0.070086  |	     37.428796      |    	0.158467     |
+| **4** |	0.062668  |	     37.467377      |    	0.156099     |
+
+</div>
+
+Vamos definir $\chi^2$, para isso, deve-se lembrar que ele é dado por:
+
+$$\chi^2 = \displaystyle\sum_i\dfrac{[\mu_i(z_i) - \mu(z_i,\Omega_M,\Omega_{EE},w)]^2}{\sigma_{\mu_i}^2}$$
+
+Então, criaremos uma função que calcula $\chi^2$:
+
+```python
+def chi2(modelo, obs, inc):
+  return ((modelo - obs)/inc)**2
+```
+
+Continua...
+
+### (b) - Elipses de Covariância de Matéria e Energia Escura
 
 
 
-[dados](dados.csv)
+
+
+
+
+
+
+### (c) - Covariância de Matéria e Energia Escura em um Universo Aberto
+
+
+
+
+
+
+
+
+### (d) - Covariância entre Matéria e Pressão da Energia Escura
+
+
+
+
+
