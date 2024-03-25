@@ -19,8 +19,11 @@
       * [(e) - *Comparação das Distâncias nos Universos*](#e---omega_ee-omega_m-e-benchmark)
       * [(f) - *Modo Alternativo de Medir Distâncias*](#f---outra-maneira-de-encontrar-d_l)
       * [(g) - *Magnitude Aparente em Diferentes Universos*](#g---magnitude-aparente-em-diferentes-universos)
-  * [**O Redshift de Super Novas do Tipo Ia**]()
-      * []()
+  * [**O Redshift de Super Novas do Tipo Ia**](#parte-2---o-redshift-de-super-novas-do-tipo-ia)
+      * [(a) - *Calculando a Densidade de Energia Escura*](#a---calculando-a-densidade-de-energia-escura)
+      * [(b) - *Elipses de Covariância de Matéria e Energia Escura*](#b---elipses-de-covariância-de-matéria-e-energia-escura)
+      * [(c) - *Covariância de Matéria e Energia Escura em um Universo Aberto*](#c---covariância-de-matéria-e-energia-escura-em-um-universo-aberto)
+      * [(d) - *Covariância entre Matéria e Pressão da Energia Escura*](#d---covariância-entre-matéria-e-pressão-da-energia-escura)
 
 ## Notações e Definições
 
