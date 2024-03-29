@@ -788,17 +788,443 @@ def chi2(modelo, obs, inc):
   return ((modelo - obs)/inc)**2
 ```
 
-Continua...
+Agora, vejamos qual o valor de $\Omega_{EE}$ minimiza o $\chi^2$. Para isso, antes devemos calcular os valores de $\chi$ para cada valor de $\Omega_{EE}$ no intervalo de $0$ a $1$:
+
+```python
+c = 3e5 # velocidade da luz em km/s
+H0 = 70 # constante de hubble em km/(s*Mpc)
+dh = c/H0 # distância de hubble em Mpc
+w = -1
+
+#Calcula a curva
+def curva(x, omega_m, omega_ee, w):
+  d_L = dist(x, omega_m, omega_ee, w)
+  return (5*np.log10(d_L) + 25)
+
+x = []
+y = []
+erro = []
+for i in range(len(dados)):
+  x.append(dados["redshift"][i])
+  y.append(dados["modulo_de_distancia"][i])
+  erro.append(dados["erro_do_mod_dist"][i])
+
+omega_ee = np.linspace(float(0.001), float(1), 999)
+omega_m = []
+for i in range(0, len(omega_ee)):
+    omega_mi = 1 - omega_ee[i]
+    omega_m.append(omega_mi)
+
+# Cálculo dos chi^2:
+
+chi = []
+for i in range(0, len(omega_ee)):
+  om_mi = omega_m[i]
+  om_eei = omega_ee[i]
+  chi_i = 0
+  for j in range(0, len(x)):
+    xj = x[j]
+    yj = y[j]
+    erroj = erro[j]
+    mod = curva(xj, om_mi, om_eei, -1)
+    chi_i += chi2(mod, yj, erro)[0]
+  chi.append(chi_i)
+
+omega_ee_min = omega_ee[chi.index(min(chi))]
+print("chi^2 mínimo:", min(chi))
+print("Omega_EE que minimiza o chi^2:", omega_ee_min)
+```
+Esse código deverá lhe imprimir os valores:
+
+```
+chi^2 mínimo: 818.3044978119215
+Omega_EE que minimiza o chi^2: 0.5765761523046092
+```
+
+Se plotarmos o gráfico de como $\chi^2$ varia em função de $\Omega_{EE}$, poderemos observar melhor o quanto $\chi^2$ pode ser minimizado.
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.plot(omega_ee, chi)
+plt.xlabel('$\\Omega_{EE}$')
+plt.ylabel('$\\chi^{2}$')
+plt.title("Variação do $\\chi^{2}$ com $\\Omega_{EE}$")
+plt.xlim(0,1)
+plt.grid()
+plt.show()
+```
+
+O gráfico mostrado deve ser:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/b86debd1-7a2c-4689-b52f-3930c8cc2e0f)
+
+Admitindo esse valor de $\Omega_{EE}$ onde $\chi^2$ é mínimo, podemos ajustar uma função que minimiza o quadrado da distância de cada ponto dos valores dos [dados](dados.csv). Portanto, devemos fazer o que se segue:
+
+```python
+w = -1
+omega_ee = omega_ee_min
+
+mod_dist = []
+for i in range(0,len(x),1):
+    model_i = curva(x[i], 1 - omega_ee_min, omega_ee_min, w)
+    mod_dist.append(model_i)
+
+a = sorted(x)
+b = sorted(mod_dist)
+
+plt.style.use(matplotx.styles.dracula)
+plt.plot(a,b,color="r",label = "Ajuste")
+plt.scatter(x,y,s=5,label = "Dados")
+plt.grid()
+plt.ylabel('$\\mu$', fontsize=16)
+plt.xlabel('z', fontsize=16)
+plt.title("Variação do $\\mu$ com z")
+plt.ylim(35,max(y))
+plt.xlim(0,max(x))
+plt.legend()
+```
+
+O gráfico resultante será o que é exibido a seguir:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/d3d19cdc-a728-4ad2-a773-305d2dafaece)
+
+Por fim, calcularemos qual a probabilidade de $\Omega_{EE}>0,5$.
+
+```python
+def prob_dens(chi):
+  pdf = np.exp(-chi/float(1.239777))
+  return pdf
+
+omega_ee = np.linspace(float(0.001), float(1), 999)
+pdf = []
+for i in range(0, len(omega_ee)):
+  pdf.append(prob_dens(chi[i]))
+
+# Fazer a integral pelo método dos retângulos pra facilitar
+n = len(omega_ee)
+
+# Vetor com as distâncias entre os pontos:
+h = []
+
+for i in range(1, n, 1):
+	h_i = omega_ee[i] - omega_ee[i-1]
+	h.append(h_i)
+
+# Integral do numerador:
+int_1 = 0
+for i in range(0, n-1, 1):
+  if omega_ee[i] >= 0.5:
+    int_1 += h[i]*(pdf[i])
+
+# Integral do denominador:
+
+int_2 = 0
+for i in range(0, n-1, 1):
+  int_2 += h[i] * (pdf[i])
+
+plt.style.use(matplotx.styles.dracula)
+plt.plot(omega_ee, pdf)
+plt.xlabel("$\\Omega_{EE}$")
+plt.ylabel("Densidade de probabilidade")
+plt.xlim(0,1)
+plt.xticks([i/10 for i in range(11)])
+plt.yticks([])
+plt.show()
+
+print("A probabilidade de Omega_EE ser maior que 0.5 é:", (int_1/int_2))
+```
+
+Esse código deve lhe exibir o seguinte:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/49300bd3-a149-434d-9cbe-37a0c533e535)
+
+```
+A probabilidade de Omega_EE ser maior que 0.5 é: 0.9999999952214428
+```
+
+Desse modo, vemos que é pouco possível que $\Omega_{EE}$ seja maior que $0,5$.
 
 ### (b) - Elipses de Covariância de Matéria e Energia Escura
 
+> **b)** Calcularemos agora o melhor valor (máxima verossimilhança) e os intervalos de $68,3$%, $95,4$% e $99,7$% ($1$, $2$, $3$ “$\sigma$” de uma distribuição Normal) para $\Omega_M$ e $\Omega_{EE}$ , supondo $w=-1$.
 
+Começaremos importanto e separando os valores do redshift, do módulo da distância e seu respectivo erro dos [dados](dados.csv).
 
+```python
+z = dados["redshift"]
+mod_dist = dados["modulo_de_distancia"]
+erro = dados["erro_do_mod_dist"]
+```
 
+Criaremos algumas funções semelhantes às que criamos anteriormente apenas para que elas não sejam mudadas.
 
+```python
+#Calcula m_model_i
+def m_modeli(z, omega_m, omega_ee, w):
+  d_L = dist(z, omega_m, omega_ee, w)
+  return (5*np.log10(d_L) + 25)
 
+#Calcula chi2
+def chi_quad(m_i, m_mod_i, s_i):
+  return ((m_i - m_mod_i)/s_i)**2
+```
 
+Definidas as funções, façamos o código que será necessário para, posteriormente, plotar a densidade covariante de probabilidades onde o valor de $\chi^2$ mínimo depende da máxima verossimilhança entre $\Omega_{EE}$ e $\Omega_m$.
 
+```python
+c = 3e5 # velocidade da luz em km/s
+H0 = 70 # constante de hubble em km/(s*Mpc)
+dh = c/H0 # distância de hubble em Mpc
+w = -1
+
+Omega_EE_max = float(1)
+Omega_EE_min = float(0)
+Omega_m_max = float(1)
+Omega_m_min = float(0)
+n = 100 #numero de pontos do vetor
+
+omega_m = np.linspace(Omega_m_min, Omega_m_max, n)
+omega_ee = np.linspace(Omega_EE_min, Omega_EE_max, n)
+OMEGA_M, OMEGA_EE = np.meshgrid(omega_m, omega_ee)
+
+chi = []
+chi_min = 1000000000
+omega_m_min = omega_m[0]
+omega_ee_min = omega_ee[0]
+
+for j in range(len(OMEGA_M)):
+  linha_chi = []
+
+  for k in range(len(OMEGA_M[j])):
+    chi_i = 0
+
+    for i in range(len(z)):
+      m_mod_ijk = m_modeli(z[i], OMEGA_M[j][k], OMEGA_EE[j][k], w)
+      m_i = mod_dist[i]
+      chi_i += chi_quad(m_i, m_mod_ijk, erro[i])
+
+    linha_chi.append(chi_i)
+
+    if chi_i < chi_min:
+      indice_chi_min_j = j
+      indice_chi_min_k = k
+      chi_min = chi_i
+      omega_m_min = OMEGA_M[j][k]
+      omega_ee_min = OMEGA_EE[j][k]
+
+  chi.append(linha_chi)
+
+chi = np.array(chi)
+
+int_conf = [2.3, 6.17, 11.8] #Deltas chi^2
+level_elip = [chi_min, chi_min + int_conf[0], chi_min + int_conf[1], chi_min + int_conf[2]] #intervalos de confiança
+```
+
+O primeiro gráfico que podemos plotar é um gráfico de calor de $\Omega_{EE}$ e $\Omega_m$ em função de $\chi^2$, segue o código e seu respectivo resultado:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.pcolormesh(OMEGA_M, OMEGA_EE, chi, cmap=plt.get_cmap('gist_heat'))
+plt.colorbar()
+plt.contour(OMEGA_M, OMEGA_EE, chi, 10, colors='green')
+plt.xlabel("$\\Omega_{M}$")
+plt.ylabel("$\\Omega_{EE}$")
+plt.title("$\\chi^2$")
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/dbaa8c83-47b2-4b56-b0a0-639bdd5c3160)
+
+Uma variação do gráfico anterior, onde analisamos o $\log\chi^2$ ao invés de $\chi^2$, também pode ser feita. Segue o código que faz isso e seu respectivo resultado:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.pcolormesh(OMEGA_M, OMEGA_EE, chi, cmap=plt.get_cmap('gist_heat'))
+plt.colorbar()
+plt.contour(OMEGA_M, OMEGA_EE, chi, 10, colors='green')
+plt.xlabel("$\\Omega_{M}$")
+plt.ylabel("$\\Omega_{EE}$")
+plt.title("$\\chi^2$")
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/6acc59b9-5102-4f9c-bb16-2b2337b394d2)
+
+O último gráfico que podemos plotar é um gráfico semelhante ao primeiro mas agora com elipses de incertezas desenhadas nele. Segue o código e seu respectivo resultado:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.pcolormesh(OMEGA_M, OMEGA_EE, chi, cmap=plt.get_cmap('gist_heat'))
+plt.colorbar()
+plt.contour(OMEGA_M, OMEGA_EE, chi, 10, colors='green')
+plt.xlabel("$\\Omega_{M}$")
+plt.ylabel("$\\Omega_{EE}$")
+plt.title("$\\chi^2$")
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/5ee7cfda-2b2e-492e-a115-fc9ebf5f4891)
+
+Escolhendo os valores de $\Omega_{EE}$ e $\Omega_m$ que minimizam $\chi^2$, podemos fazer um novo ajuste dos [dados](dados.csv).
+
+```
+# Definindo os novos limites para z
+z_extended = np.linspace(-0.03, 1.45, len(z))
+
+# Comparação entre modelo e dados
+model_extended = []
+for i in range(len(z_extended)):
+    model_i = m_modeli(z_extended[i], omega_m_min, omega_ee_min, -1)
+    model_extended.append(model_i)
+
+redshift_extended = sorted(z_extended)
+modeldist_extended = sorted(model_extended)
+
+plt.style.use(matplotx.styles.dracula)
+plt.plot(z, mod_dist, linestyle="", marker='.', label = "Dados")
+plt.plot(redshift_extended, modeldist_extended, linewidth=2, color='r', label = "Modelo")
+plt.legend()
+plt.title("Modelo versus Dados")
+plt.ylabel("Módulo de distância")
+plt.xlabel("Redshift")
+plt.xlim(-0.03,1.45)
+plt.ylim(33.5,45.5)
+plt.grid()
+plt.show()
+
+print("chi^2_min: %.2f" %chi_min)
+print("Omega_m do chi_min: %.2f" %omega_m_min)
+print("Omega_ee de chi_min: %.2f" %omega_ee_min)
+```
+
+Esse cógido deve retornar:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/6e0daead-3c3e-4c2e-8497-4bc49f61d0c7)
+
+```
+chi^2_min: 562.24
+Omega_m do chi_min: 0.57
+Omega_ee de chi_min: 0.63
+```
+
+Agora, se quisermos ver explicitamente como $\chi^2$ varia em função de $\Omega_m$ podemos gerar um gráfico dessa variação:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.plot(omega_m, chi[indice_chi_min_j])
+plt.xlabel('$\\Omega_{M}$')
+plt.ylabel('$\\chi^{2}$')
+plt.xlim(0,1)
+plt.title("$\\chi^{2}$ versus $\\Omega_{M}$")
+plt.grid()
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/50cd340a-82fd-4fa0-ad01-fbe2b3041eb1)
+
+Por fim, se quisermos ver explicitamente como $\chi^2$ varia em função de $\Omega_m$ podemos gerar um gráfico dessa variação:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.plot(omega_ee, chi[indice_chi_min_j])
+plt.xlabel('$\\Omega_{EE}$')
+plt.ylabel('$\\chi^{2}$')
+plt.xlim(0,1)
+plt.title("$\\chi^{2}$ versus $\\Omega_{EE}$")
+plt.grid()
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/f686d1fb-15a1-4747-985b-06b3976e7e08)
+
+Concluindo a nossa análise, podemos encontrar os valores dos extremos nos intervalos pelo seguinte código:
+
+```python
+# Encontra os valores extremos dos intervalos
+def encont_inter(chi, OMEGA_M, OMEGA_EE):
+  int_omega_m_68 = [-2, 2]
+  int_omega_m_95 = [-2, 2]
+  int_omega_m_99 = [-2, 2]
+
+  int_omega_ee_68 = [-2, 2]
+  int_omega_ee_95 = [-2, 2]
+  int_omega_ee_99 = [-2, 2]
+
+  int_con = [2.3, 6.17, 11.8] # Deltas chi^2
+
+  for i in range(len(chi)):
+
+    for j in range(len(chi[0])):
+
+      if (chi[i][j] < (chi_min + int_con[0])):
+
+        if OMEGA_M[i][j] > int_omega_m_68[0]:
+          int_omega_m_68[0] = OMEGA_M[i][j]
+
+        elif OMEGA_M[i][j] < int_omega_m_68[1]:
+          int_omega_m_68[1] = OMEGA_M[i][j]
+
+        if OMEGA_EE[i][j] > int_omega_ee_68[0]:
+          int_omega_ee_68[0] = OMEGA_EE[i][j]
+
+        elif OMEGA_EE[i][j] < int_omega_ee_68[1]:
+          int_omega_ee_68[1] = OMEGA_EE[i][j]
+
+      elif (chi[i][j] < (chi_min + int_con[1])):
+
+        if OMEGA_M[i][j] > int_omega_m_95[0]:
+          int_omega_m_95[0] = OMEGA_M[i][j]
+
+        elif OMEGA_M[i][j] < int_omega_m_95[1]:
+          int_omega_m_95[1] = OMEGA_M[i][j]
+
+        if OMEGA_EE[i][j] > int_omega_ee_95[0]:
+          int_omega_ee_95[0] = OMEGA_EE[i][j]
+
+        elif OMEGA_EE[i][j] < int_omega_ee_95[1]:
+          int_omega_ee_95[1] = OMEGA_EE[i][j]
+
+      elif (chi[i][j] < (chi_min + int_con[2])):
+
+        if OMEGA_M[i][j] > int_omega_m_99[0]:
+          int_omega_m_99[0] = OMEGA_M[i][j]
+
+        elif OMEGA_M[i][j] < int_omega_m_99[1]:
+          int_omega_m_99[1] = OMEGA_M[i][j]
+
+        if OMEGA_EE[i][j] > int_omega_ee_99[0]:
+          int_omega_ee_99[0] = OMEGA_EE[i][j]
+
+        elif OMEGA_EE[i][j] < int_omega_ee_99[1]:
+          int_omega_ee_99[1] = OMEGA_EE[i][j]
+
+  return int_omega_m_68, int_omega_m_95, int_omega_m_99, int_omega_ee_68, int_omega_ee_95, int_omega_ee_99
+```
+
+Assim, finalmente, podemos imprimir os intervalos de confianças das elipses.
+
+```python
+intervalos = encont_inter(chi, OMEGA_M, OMEGA_EE)
+
+int_omega_m_68 = intervalos[0]
+int_omega_m_95 = intervalos[1]
+int_omega_m_99 = intervalos[2]
+int_omega_ee_68 = intervalos[3]
+int_omega_ee_95 = intervalos[4]
+int_omega_ee_99 = intervalos[5]
+
+print("Intervalo de confiança de 68: Omega_M = [%.2f, %.2f], Omega_EE = [%.2f, %.2f]" %(int_omega_m_68[1], int_omega_m_68[0], int_omega_ee_68[1], int_omega_ee_68[0]))
+print("Intervalo de confiança de 95: Omega_M = [%.2f, %.2f], Omega_EE = [%.2f, %.2f]" %(int_omega_m_95[1], int_omega_m_95[0], int_omega_ee_95[1], int_omega_ee_95[0]))
+print("Intervalo de confiança de 99: Omega_M = [%.2f, %.2f], Omega_EE = [%.2f, %.2f]" %(int_omega_m_99[1], int_omega_m_99[0], int_omega_ee_99[1], int_omega_ee_99[0]))
+```
+
+Isso deve imprimir:
+
+```
+Intervalo de confiança de 68: Omega_M = [0.26, 0.92], Omega_EE = [0.38, 0.90]
+Intervalo de confiança de 95: Omega_M = [0.07, 1.00], Omega_EE = [0.23, 1.00]
+Intervalo de confiança de 99: Omega_M = [0.00, 1.00], Omega_EE = [0.13, 1.00]
+```
 
 ### (c) - Covariância de Matéria e Energia Escura em um Universo Aberto
 
