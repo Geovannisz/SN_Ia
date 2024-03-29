@@ -1067,7 +1067,7 @@ plt.show()
 
 Escolhendo os valores de $\Omega_{EE}$ e $\Omega_m$ que minimizam $\chi^2$, podemos fazer um novo ajuste dos [dados](dados.csv).
 
-```
+```python
 # Definindo os novos limites para z
 z_extended = np.linspace(-0.03, 1.45, len(z))
 
@@ -1228,16 +1228,176 @@ Intervalo de confiança de 99: Omega_M = [0.00, 1.00], Omega_EE = [0.13, 1.00]
 
 ### (c) - Covariância de Matéria e Energia Escura em um Universo Aberto
 
+> c) Agora, calcularemos o melhor valor (máxima verossimilhança) e as os intervalos de $68,3$%, $95,4$% e $99,7$% ($1$, $2$, $3$ “$\sigma$” de uma distribuição Normal) para $\Omega_M$ e $\Omega_{EE}$ , supondo $w=-1$ e com um prior na curvatura vinda da CMB: $\Omega_K = -0,06\pm 0,05$. Para isso simplesmente  adicionaremos ao valor do $\chi^2$ um termo $[(1- \Omega_M -\Omega_{EE}) + 0,06]^2/0,05^2]$ e procederemos como no caso anterior.
+
+Devemos reproduzir o mesmo que no caso anterior, mas agora com esse novo valor de $\Omega_k$. Antes de plotar os gráficos de calor semelhante ao que fizemos, vamos definir nossas variáveis.
+
+```python
+chi_min = 1000000000
+omega_m_min = OMEGA_M[0][0]
+omega_ee_min = OMEGA_EE[0][0]
+
+for i in range(len(chi)):
+
+  for j in range(len(chi[0])):
+    chi[i][j] += ((1 - OMEGA_M[i][j] - OMEGA_EE[i][j]) + 0.06)**2/(0.05**2)
+
+    if chi[i][j] < chi_min:
+      indice_chi_min_j = j
+      indice_chi_min_k = k
+      chi_min = chi[i][j]
+      omega_m_min = OMEGA_M[i][j]
+      omega_ee_min = OMEGA_EE[i][j]
+
+int_conf = [2.3, 6.17, 11.8] #Deltas chi^2
+level_elip = [chi_min, chi_min + int_conf[0], chi_min + int_conf[1], chi_min + int_conf[2]] # intervalos de confiança
+```
+
+O gráfico de calor de $\chi^2$ em função de $\Omega_{EE}$ e $\Omega_m$ pode ser plotado com:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.pcolormesh(OMEGA_M, OMEGA_EE, chi, cmap=plt.get_cmap('gist_heat'))
+plt.colorbar()
+plt.contour(OMEGA_M, OMEGA_EE, chi, 10)
+plt.xlabel("$\\Omega_{M}$")
+plt.ylabel("$\\Omega_{EE}$")
+plt.title("$\\chi^2$")
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/9ae5abce-bc14-437a-a30c-c365f7399323)
 
 
+Agora, o gráfico de calor de $\log\chi^2$ é conseguido da forma a seguir:
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.pcolormesh(OMEGA_M, OMEGA_EE, np.log10(chi), cmap=plt.get_cmap('gist_heat'))
+plt.colorbar()
+plt.contour(OMEGA_M, OMEGA_EE, chi, 10)
+plt.xlabel("$\\Omega_{M}$")
+plt.ylabel("$\\Omega_{EE}$")
+plt.title("$Log(\\chi^2)$")
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/d85b40fc-45ac-4bc4-8bb2-a464c149c985)
 
 
+Por fim, agora com as elipses de incertezas, basta fazer:
 
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.pcolormesh(OMEGA_M, OMEGA_EE, chi, cmap=plt.get_cmap('gist_heat'))
+plt.colorbar()
+plt.contourf(OMEGA_M, OMEGA_EE, chi, level_elip, colors=['red', 'green', 'yellow'])
+plt.colorbar()
+plt.title("")
+plt.xlabel("$\\Omega_{M}$")
+plt.ylabel("$\\Omega_{EE}$")
+plt.show()
+```
 
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/b1406a72-9da0-4a21-8254-9334c8f40f07)
+
+Análogo ao que fizemos antes, vamos verificar como o modelo de $\Omega_{EE}$ e $\Omega_m$, agora junto com um $\Omega_k\neq 0$, se ajusta aos [dados](dados.csv).
+
+```python
+# Definindo os novos limites para z
+z_extended = np.linspace(-0.03, 1.45, len(z))
+
+# Comparação entre modelo e dados
+model_extended = []
+for i in range(len(z_extended)):
+    model_i = m_modeli(z_extended[i], omega_m_min, omega_ee_min, -1)
+    model_extended.append(model_i)
+
+redshift_extended = sorted(z_extended)
+modeldist_extended = sorted(model_extended)
+
+plt.style.use(matplotx.styles.dracula)
+plt.plot(z, mod_dist, linestyle="", marker='.', label = "Dados")
+plt.plot(redshift_extended, modeldist_extended, linewidth=2, color='r', label = "Modelo")
+plt.legend()
+plt.title("Modelo versus Dados")
+plt.ylabel("Módulo de distância")
+plt.xlabel("Redshift")
+plt.xlim(-0.03,1.45)
+plt.ylim(33.5,45.5)
+plt.grid()
+plt.show()
+
+print("chi^2_min: %.2f" %chi_min)
+print("Omega_m de chi_min: %.2f" %omega_m_min)
+print("Omega_ee de chi_min: %.2f" %omega_ee_min)
+```
+ A execução deste código nos dá:
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/a7d847be-fb33-4967-9eff-c3f50577bcbd)
+
+```
+chi^2_min: 562.40
+Omega_m de chi_min: 0.49
+Omega_ee de chi_min: 0.57
+```
+
+Para ficar claro o menor valor de $\chi^2$ em $\Omega_m$, plotaremos um gráfico.
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.plot(omega_m, chi[indice_chi_min_j])
+plt.xlabel('$\\Omega_{M}$')
+plt.ylabel('$\\chi^{2}$')
+plt.xlim(0,1)
+plt.title("$\\chi^{2}$ versus $\\Omega_{M}$")
+plt.grid()
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/7fe79dbb-f0b0-4165-9748-80d7ebfe2d02)
+
+Por fim, para ficar claro o menor valor de $\chi^2$ em $\Omega_{EE}$, plotaremos um gráfico.
+
+```python
+plt.style.use(matplotx.styles.dracula)
+plt.plot(omega_ee, chi[indice_chi_min_j])
+plt.xlabel('$\\Omega_{EE}$')
+plt.ylabel('$\\chi^{2}$')
+plt.xlim(0,1)
+plt.title("$\\chi^{2}$ versus $\\Omega_{EE}$")
+plt.grid()
+plt.show()
+```
+
+![image](https://github.com/Geovannisz/SN_Ia/assets/82838501/e8658224-da23-4158-bac3-76b620053af5)
+
+Finalmente, podemos printar os valores que delimitam as elipses de incertezas:
+
+```python
+intervalos = encont_inter(chi, OMEGA_M, OMEGA_EE)
+
+int_omega_m_68 = intervalos[0]
+int_omega_m_95 = intervalos[1]
+int_omega_m_99 = intervalos[2]
+int_omega_ee_68 = intervalos[3]
+int_omega_ee_95 = intervalos[4]
+int_omega_ee_99 = intervalos[5]
+
+print("Intervalo de confiança de 68: Omega_M = [%.2f, %.2f], Omega_EE = [%.2f, %.2f]" %(int_omega_m_68[1], int_omega_m_68[0], int_omega_ee_68[1], int_omega_ee_68[0]))
+print("Intervalo de confiança de 95: Omega_M = [%.2f, %.2f], Omega_EE = [%.2f, %.2f]" %(int_omega_m_95[1], int_omega_m_95[0], int_omega_ee_95[1], int_omega_ee_95[0]))
+print("Intervalo de confiança de 99: Omega_M = [%.2f, %.2f], Omega_EE = [%.2f, %.2f]" %(int_omega_m_99[1], int_omega_m_99[0], int_omega_ee_99[1], int_omega_ee_99[0]))
+```
+
+```
+Intervalo de confiança de 68: Omega_M = [0.45, 0.54], Omega_EE = [0.54, 0.61]
+Intervalo de confiança de 95: Omega_M = [0.41, 0.57], Omega_EE = [0.51, 0.63]
+Intervalo de confiança de 99: Omega_M = [0.39, 0.60], Omega_EE = [0.48, 0.66]
+```
 
 ### (d) - Covariância entre Matéria e Pressão da Energia Escura
 
-
+> **d)** Calcule o melhor valor (máxima verossimilhança) e as os intervalos de $68,3$%, $95,4$% e $99,7$% ($1$, $2$, $3$ “$\sigma$” de uma distribuição Normal) para $\Omega_M$ e $w$, supondo um Universo plano.
 
 
 
